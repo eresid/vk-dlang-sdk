@@ -1,0 +1,16 @@
+{
+	"authors": [
+		"Eugene Sakara"
+	],
+	"name": "vk-dlang-sdk",
+	"license": "MIT",
+	"copyright": "Copyright © 2016, Eugene Sakara",
+	"description": "D library for VK API interaction, includes OAuth 2.0 authorization and API methods",
+	"dependencies": {
+		"vibe-d": "~>0.7.26",
+		"requests": "~>0.3.0"
+	},
+	"versions": [
+		"VibeCustomMain"
+	]
+}
