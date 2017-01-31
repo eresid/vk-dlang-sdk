@@ -332,11 +332,19 @@ abstract class AbstractQueryBuilder(T, R) : ApiRequest!R {
      * @return map of values
      */
     string[string] build() {
-		// TODO params.keys
+		import std.algorithm;
+		import std.conv;
+
+		// TODO remove
+		// if (!params.keySet().containsAll(essentialKeys())) {
 		
-        if (!params.keySet().containsAll(essentialKeys())) {
-            throw new IllegalArgumentException("Not all the keys are passed: essential keys are " ~ essentialKeys());
-        }
+		if (params.keys.all!(a => essentialKeys().canFind(a))) {
+			throw new Exception("Not all the keys are passed: essential keys are " ~to!string(essentialKeys()));
+		}
+		//all!"a > 0"([1, 2, 3, 4]) 
+		//if (essentialKeys().all(a => params.canFind(a))) {
+		//	throw new Exception("Not all the keys are passed: essential keys are " ~ essentialKeys());
+		//}
 
         return params.dup;
     }

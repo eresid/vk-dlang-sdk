@@ -40,7 +40,7 @@ struct BaseError {
         return hash;
     }
 
-    bool opEquals(Error error) const @safe pure nothrow {
+    bool opEquals(BaseError error) const @safe pure nothrow {
 		return (errorCode == error.errorCode &&
 			errorMsg == error.errorMsg &&
 			requestParams == error.requestParams);

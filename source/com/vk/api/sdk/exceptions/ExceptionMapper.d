@@ -6,9 +6,9 @@ import com.vk.api.sdk.objects.base.BaseError;
 
 class ExceptionMapper {
     static ApiException parseException(BaseError error) {
-        switch (error.getErrorCode) {
+        switch (error.errorCode) {
             case 1:
-                return new ApiUnknownException(error.getErrorMsg);
+                return new ApiUnknownException(error.errorMsg);
          /*   case 2:
                 return new ApiDisabledException(error.getErrorMsg());
             case 3:
@@ -256,7 +256,7 @@ class ExceptionMapper {
             case 252:
                 return new ApiPollsAnswerIdException(error.getErrorMsg());*/
             default:
-                return new ApiException(error.getErrorCode, error.getErrorMsg);
+                return new ApiException(error.errorCode, error.errorMsg);
         }
     }
 }

@@ -1,12 +1,16 @@
 module com.vk.api.sdk.client.ApiRequest;
 
 import std.experimental.logger;
+import std.algorithm.searching : find;
+
 import vibe.data.json;
 import std.json;
 
+import com.vk.api.sdk.client.ClientResponse;
 import com.vk.api.sdk.client.TransportClient;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
+import com.vk.api.sdk.exceptions.ExceptionMapper;
 import com.vk.api.sdk.objects.base.BaseError;
 
 abstract class ApiRequest(T) {
@@ -32,12 +36,13 @@ abstract class ApiRequest(T) {
         string textResponse = executeAsString();
         JSONValue json = parseJSON(textResponse);
 
-        if (json["error"] != JSON_TYPE.NULL) {
-            JSONValue errorElement = json["error"];
+		if (auto errorElement = "error" in json) {
+        //if (json["error"].type != JSON_TYPE.NULL) {
+            //JSONValue errorElement = json["error"];
             BaseError error;
             try {
-				error = deserializeJson!BaseError(errorElement);
-            } catch (JsonSyntaxException e) {
+				error = deserializeJson!BaseError(errorElement.toString());
+            } catch (Exception e) {
                 log("Invalid JSON: %s\n%s", textResponse, e.msg);
                 throw new ClientException("Can't parse json response");
             }
@@ -48,14 +53,16 @@ abstract class ApiRequest(T) {
             throw exception;
         }
 
-        JSONValue response = json;
-        if (json["response"] != JSON_TYPE.NULL) {
-            response = json["response"];
-        }
+        //JSONValue response = json;
+        //if (json["response"].type != JSON_TYPE.NULL) {
+        //    response = json["response"];
+        //}
+        
+        JSONValue response = "response" in json ? json["response"] : json;
 
         try {
-            return deserializeJson!T(response);
-        } catch (JsonSyntaxException e) {
+            return deserializeJson!T(response.toString());
+        } catch (Exception e) {
             log("Invalid JSON: %s\n%s", textResponse, e.msg);
             throw new ClientException("Can't parse json response");
         }
@@ -65,7 +72,7 @@ abstract class ApiRequest(T) {
         ClientResponse response;
         try {
             response = client.post(url, getBody());
-        } catch (IOException e) {
+        } catch (Exception e) {
 			log("Problems with request: %s\n%s", url, e.msg);
             throw new ClientException("I/O exception");
         }
@@ -74,11 +81,11 @@ abstract class ApiRequest(T) {
             throw new ClientException("Internal API server error");
         }
 
-        if (!response.getHeaders().containsKey("Content-Type")) {
+        if ("Content-Type" !in response.getHeaders()) {
             throw new ClientException("No content type header");
         }
 
-        if (!response.getHeaders().get("Content-Type").contains("application/json")) {
+        if (response.getHeaders()["Content-Type"].find("application/json").length > 0) {
             throw new ClientException("Invalid content type");
         }
 

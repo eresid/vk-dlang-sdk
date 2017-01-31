@@ -16,20 +16,20 @@ class HttpTransportClient : TransportClient {
     private static HttpTransportClient instance;
 
     private this() {
-		logger = new FileLogger("logFile", "HttpTransportClient");
+		logger = new FileLogger("logFile");
 		//supervisor = new ConnectionsSupervisor();
     }
 
     static TransportClient getInstance() {
-        if (instance == null) {
-            instance = new HttpTransportClient();
+        if (instance is null) {
+            instance = new HttpTransportClient;
         }
 
         return instance;
     }
 
     private ClientResponse call(Request request, string url, string requestBody, bool isPost) {
-		auto request = Request;
+		//auto request = Request;
 		if (isPost) {
 			request.headers["Content-Type"] = "application/x-www-form-urlencoded";
 		}
