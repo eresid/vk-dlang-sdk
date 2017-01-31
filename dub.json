@@ -7,6 +7,7 @@
 	"copyright": "Copyright © 2016, Eugene Sakara",
 	"description": "D library for VK API interaction, includes OAuth 2.0 authorization and API methods",
 	"dependencies": {
+		"marsrestclient": "~master",
 		"vibe-d:data": "~>0.7.26",
 		"requests": "~>0.4.0"
 	},

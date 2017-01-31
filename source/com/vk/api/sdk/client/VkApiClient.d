@@ -5,7 +5,7 @@ import com.vk.api.sdk.client.TransportClient;
 
 class VkApiClient {
 
-	private immutable string API_VERSION = "5.53";
+	private immutable string API_VERSION = "5.62";
 	private immutable string API_ADDRESS = "https://api.vk.com/method/";
 
 	private TransportClient transportClient;
