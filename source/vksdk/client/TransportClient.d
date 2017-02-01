@@ -11,6 +11,4 @@ interface TransportClient {
     ClientResponse post(string url, string fileName, File file);
 
     ClientResponse post(string url);
-
-    ClientResponse get(string url);
 }

@@ -3,28 +3,22 @@ module main;
 import std.stdio;
 import std.experimental.logger;
 
+import vksdk;
+
 immutable int APP_ID = 123456;
 immutable string CLIENT_SECRET = "CLIENT_SECRET";
 immutable string REDIRECT_URI = "REDIRECT_URI";
 immutable string CODE = "CODE";
 
 void main()
-{
-	import com.vk.api.sdk.client.VkApiClient;
-	import com.vk.api.sdk.client.actors.UserActor;
-	import com.vk.api.sdk.client.TransportClient;
-	import com.vk.api.sdk.exceptions.ApiException;
-	import com.vk.api.sdk.exceptions.ClientException;
-	import com.vk.api.sdk.httpclient.HttpTransportClient;
-	import com.vk.api.sdk.objects.AuthResponse;
-	
-	TransportClient client = HttpTransportClient.getInstance;
+{	
+	TransportClient client = MarsTransportClient.getInstance;
 	VkApiClient vk = new VkApiClient(client);
 	
 	try {
-	AuthResponse authResponse = vk.oauth()
-		.userAuthorizationCodeFlow(APP_ID, CLIENT_SECRET, REDIRECT_URI, CODE)
-		.execute();
+		AuthResponse authResponse = vk.oauth()
+			.userAuthorizationCodeFlow(APP_ID, CLIENT_SECRET, REDIRECT_URI, CODE)
+			.execute();
 		
 		writeln("access_token: ", authResponse.accessToken);
 		writeln("user_id: ", authResponse.userId);

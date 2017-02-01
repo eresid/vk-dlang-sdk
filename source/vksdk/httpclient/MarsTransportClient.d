@@ -1,4 +1,4 @@
-module vksdk.httpclient.HttpTransportClient;
+module vksdk.httpclient.MarsTransportClient;
 
 import std.datetime;
 import std.experimental.logger.filelogger;
@@ -6,14 +6,16 @@ import std.stdio;
 
 import vksdk.client.ClientResponse;
 import vksdk.client.TransportClient;
-import requests;
+import mars;
 
-synchronized class HttpTransportClient : TransportClient {
+// Singleton
+// https://p0nce.github.io/d-idioms/#Leveraging-TLS-for-a-fast-thread-safe-singleton
+class MarsTransportClient : TransportClient {
 
 	private FileLogger logger;
 
     //private immutable ConnectionsSupervisor supervisor;
-    private static HttpTransportClient instance;
+    private __gshared static MarsTransportClient instance;
 
     private this() {
 		HttpClientOptions options = new HttpClientOptions;
@@ -28,7 +30,7 @@ synchronized class HttpTransportClient : TransportClient {
 
     static TransportClient getInstance() {
         if (instance is null) {
-            instance = new HttpTransportClient;
+            instance = new MarsTransportClient;
         }
 
         return instance;
@@ -91,9 +93,5 @@ synchronized class HttpTransportClient : TransportClient {
 		form.add(formData("file", file, ["filename": fileName, "Content-Type": "text/plain"]));
 
         return call(url, form);
-    }
-
-    override ClientResponse get(string url) {
-		return call(url, null, false);
     }
 }
